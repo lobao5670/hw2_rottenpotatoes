@@ -1,6 +1,17 @@
 class MoviesController < ApplicationController
+  def self.set_ratings
+    @all_ratings = Array.new(['G','PG','PG-13','R','NC-17'])
+  end
+
   def index
+    @all_ratings = ['G','PG','PG-13','R','NC-17']
     @movies = Movie.all
+    sort = params[:sort_by]
+    @movies = Movie.order(sort)
+    rating_filter = params[:ratings]
+    if (rating_filter != nil)
+      @movies = Movie.where(rating: rating_filter.keys).all
+    end
   end
 
   def show
